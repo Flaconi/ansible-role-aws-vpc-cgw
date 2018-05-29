@@ -1,0 +1,36 @@
+---
+
+- name: ensure cgw is created
+  ec2_customer_gateway:
+    # Fixed values
+    state: present
+    # Required values
+    name: "{{ cgw.name }}"
+    ip_address: "{{ cgw.ip_address }}"
+    # Optional values
+    bgp_asn: "{{ cgw.bgp_asn | default(omit) }}"
+    routing: "{{ cgw.routing | default(omit) }}"
+    region: "{{ cgw.region | default(aws_vpc_cgw_default_region | default(omit)) }}"
+    aws_access_key: "{{ lookup('ENV', 'AWS_ACCESS_KEY') | default(omit) }}"
+    aws_secret_key: "{{ lookup('ENV', 'AWS_SECRET_KEY') | default(omit) }}"
+    security_token: "{{ lookup('ENV', 'AWS_SECURITY_TOKEN') | default(omit) }}"
+    profile: "{{ aws_vpc_cgw_profile | default(omit) }}"
+  register: _aws_vpc_cgw
+
+- name: ensure cgw is correctly tagged
+  ec2_tag:
+    # Fixed values
+    state: present
+    # Required values
+    resource: "{{ _aws_vpc_cgw.gateway.customer_gateway.customer_gateway_id }}"
+    tags: "{{ cgw.tags | default({}) | get_attr('key', 'val') }}"
+    # Optional values
+    region: "{{ cgw.region | default(aws_vpc_cgw_default_region | default(omit)) }}"
+    aws_access_key: "{{ lookup('ENV', 'AWS_ACCESS_KEY') | default(omit) }}"
+    aws_secret_key: "{{ lookup('ENV', 'AWS_SECRET_KEY') | default(omit) }}"
+    security_token: "{{ lookup('ENV', 'AWS_SECURITY_TOKEN') | default(omit) }}"
+    profile: "{{ aws_vpc_cgw_profile | default(omit) }}"
+  when:
+    - _aws_vpc_cgw.gateway is defined
+    - _aws_vpc_cgw.gateway.customer_gateway is defined
+    - _aws_vpc_cgw.gateway.customer_gateway.customer_gateway_id is defined
