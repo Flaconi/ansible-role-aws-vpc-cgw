@@ -57,3 +57,24 @@ aws_vpc_cgws:
       - key: department
         val: devops
 ```
+
+
+## Testing
+
+#### Requirements
+
+* Docker
+* [yamllint](https://github.com/adrienverge/yamllint)
+
+#### Run tests
+
+```bash
+# Lint the source files
+make lint
+
+# Run integration tests with default Ansible version
+make test
+
+# Run integration tests with custom Ansible version
+make test ANSIBLE_VERSION=2.4
+```
