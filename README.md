@@ -1,5 +1,7 @@
 # Ansible role: AWS VPC CGW
 
+[![Backup Github Respository](https://github.com/Flaconi/ansible-role-aws-vpc-cgw/actions/workflows/backups.yml/badge.svg)](https://github.com/Flaconi/ansible-role-aws-vpc-cgw/actions/workflows/backups.yml)
+
 This role handles the creation of any number of customer gateways.
 
 [![Build Status](https://travis-ci.org/Flaconi/ansible-role-aws-vpc-cgw.svg?branch=master)](https://travis-ci.org/Flaconi/ansible-role-aws-vpc-cgw)
